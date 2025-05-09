@@ -1,48 +1,70 @@
 {
   "name": "orange-sec-kit",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
+  "version": "1.0.0",
+  "description": "小橘子漏洞工坊",
+  "author": "chenshiyi",
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
-    "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --build",
-    "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "start": "npm run build:front && electron .",
+    "start:no-build": "electron .",
+    "dev": "concurrently \"cd front && npm run dev\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "build:front": "cd front && npm run build",
+    "build:electron": "electron-builder",
+    "build": "npm run build:front && npm run build:electron",
+    "build:mac:amd64": "npm run build:front && electron-builder --mac --x64",
+    "build:mac:arm64": "npm run build:front && electron-builder --mac --arm64",
+    "build:win": "npm run build:front && electron-builder --win",
+    "build:linux": "npm run build:front && electron-builder --linux"
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.56.3",
-    "@bytemd/plugin-gfm": "^1.21.0",
-    "@bytemd/plugin-highlight": "^1.21.0",
-    "@bytemd/vue-next": "^1.21.0",
-    "@wangeditor/editor-for-vue": "^5.1.12",
-    "axios": "^1.7.9",
-    "compressorjs": "^1.2.1",
-    "github-markdown-css": "^5.8.1",
-    "lodash": "^4.17.21",
-    "monaco-editor": "^0.52.2",
-    "pinia": "^2.3.1",
-    "vite-plugin-monaco-editor": "^1.1.0",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0"
+    "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
-    "@tsconfig/node22": "^22.0.0",
-    "@types/node": "^22.10.7",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/eslint-config-prettier": "^10.1.0",
-    "@vue/eslint-config-typescript": "^14.3.0",
-    "@vue/tsconfig": "^0.7.0",
-    "eslint": "^9.18.0",
-    "eslint-plugin-vue": "^9.32.0",
-    "jiti": "^2.4.2",
-    "npm-run-all2": "^7.0.2",
-    "prettier": "^3.4.2",
-    "typescript": "~5.7.3",
-    "vite": "^6.0.11",
-    "vite-plugin-vue-devtools": "^7.7.0",
-    "vue-tsc": "^2.2.0"
+    "concurrently": "^8.2.0",
+    "cross-env": "^7.0.3",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.6.4",
+    "wait-on": "^7.0.1"
+  },
+  "build": {
+    "appId": "com.orange-sec-kit.app",
+    "productName": "小橘子漏洞工坊",
+    "files": [
+      "electron/**/*",
+      "front/dist/**/*",
+      "!**/node_modules/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend",
+        "to": "backend",
+        "filter": ["**/*"]
+      }
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "resources"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": ["dmg", "zip"],
+      "icon": "resources/logo.jpg"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "resources/logo.jpg"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true,
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    }
   }
-}
+} 

@@ -26,5 +26,10 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
+logs
 *.tsbuildinfo
+/bin/
+/logs*/
+release/
+out/
+backend/

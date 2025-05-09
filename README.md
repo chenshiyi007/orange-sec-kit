@@ -1,39 +1,63 @@
-# orange-sec-kit
+# 小橘子漏洞工坊 - 桌面版
 
-This template should help get you started developing with Vue 3 in Vite.
+小橘子漏洞工坊安全工具集的桌面版应用，基于Electron构建。
 
-## Recommended IDE Setup
+## 项目结构
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- `electron/` - Electron主进程和预加载脚本
+- `front/` - Vue 3 + Vite前端应用
+- `backend/` - 后端可执行文件
+- `resources/` - 应用资源（图标等）
 
-## Type Support for `.vue` Imports in TS
+## 开发指南
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### 开发环境配置
 
-## Customize configuration
+1. 安装依赖
+   ```bash
+   npm install
+   cd front && npm install
+   ```
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+2. 开发模式运行
+   ```bash
+   npm run dev
+   ```
+   这将启动前端开发服务器，并在其就绪后启动Electron应用。
 
-## Project Setup
+### 构建应用
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
+构建适用于当前平台的安装包:
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+构建特定平台的安装包:
+```bash
+# macOS
+npm run build:mac
 
-```sh
-npm run lint
+# Windows
+npm run build:win
+
+# Linux
+npm run build:linux
 ```
+
+构建后的文件将保存在`dist/`目录下。
+
+## 应用配置
+
+应用配置在`package.json`的`build`部分进行设置，包括:
+
+- 应用ID
+- 产品名称
+- 打包文件
+- 图标
+- 安装程序选项
+
+## 注意事项
+
+1. 后端应用将作为资源被打包，根据操作系统决定启动`.exe`或无扩展名的可执行文件
+2. 在Windows上需要命名为`orange_kit_backend.exe`，在其他平台上需要命名为`orange_kit_backend`
+3. 构建前请确保已将正确的后端文件放在`backend/`目录中

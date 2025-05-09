@@ -1,0 +1,4 @@
+electron/**/*.js
+electron/**/*.cjs
+node_modules/
+dist/
