@@ -3,6 +3,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const http = require('http');
+const { globalShortcut } = require('electron');
 
 // 禁用 Electron Security Warning
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
@@ -492,30 +493,16 @@ app.whenReady().then(async () => {
     });
   });
 
-  // 添加全局菜单快捷键（即使在隐藏菜单的情况下也能工作）
-  // 创建一个包含开发者工具选项的菜单
-  const devMenu = Menu.buildFromTemplate([
-    {
-      label: 'Developer',
-      submenu: [
-        {
-          label: 'Toggle Developer Tools',
-          accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-          click: () => {
-            const focusedWindow = BrowserWindow.getFocusedWindow();
-            if (focusedWindow) {
-              focusedWindow.webContents.toggleDevTools();
-            }
-          }
-        }
-      ]
+  // 注册调试全局快捷键
+  globalShortcut.register(process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I', () => {
+    const focusedWindow = BrowserWindow.getFocusedWindow();
+    if (focusedWindow) {
+      focusedWindow.webContents.toggleDevTools();
     }
-  ]);
+  });
   
-  // 在Windows和Linux上设置应用程序菜单
-  if (process.platform !== 'darwin') {
-    Menu.setApplicationMenu(devMenu);
-  }
+  // 保持菜单隐藏
+  Menu.setApplicationMenu(null);
 
   app.on('activate', () => {
     // 在 macOS 系统内, 如果没有已开启的应用窗口
