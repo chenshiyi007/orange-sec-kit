@@ -572,6 +572,7 @@ export default {
         appDescription: 'Application Description',
         add: 'Add',
         createFailed: 'Creation Failed',
+        createSuccess: 'Create Successful',
       },
     },
     tools: {

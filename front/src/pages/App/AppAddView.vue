@@ -62,7 +62,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { IconPlus } from '@arco-design/web-vue/es/icon'
-import { Notification } from '@arco-design/web-vue'
+import { Notification, Message } from '@arco-design/web-vue'
 import * as Payloads from '@/interface/app.ts'
 import { addApp } from '@/api/app.ts'
 import { useI18n } from 'vue-i18n'
@@ -98,6 +98,7 @@ const addAppHandler = async () => {
       return
     }
     addLoading.value = false
+    Message.success(t('pages.app.add.createSuccess'))
     router.push(`/wiki/app/detail/${res.data?.data}`)
   } catch (e) {
     void e

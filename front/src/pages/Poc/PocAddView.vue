@@ -177,7 +177,7 @@
       >
         <poc-checker :rule_link="form.rule_link"></poc-checker>
         <template #footer>
-          <a-button @click="closeRuleTest">{{ t('pages.poc.profile.close') }}</a-button>
+          <a-button @click="closeRuleTest">{{ t('pages.poc.close') }}</a-button>
         </template>
       </a-drawer>
     </div>
@@ -207,7 +207,27 @@ const init_options = ref<Array<{ instance_id: string; name: string; isNew: boole
 
 const clear = ref(false)
 
-const template = ref('template')
+const template = ref(`expression: step1 && step2 #规则模板
+rules:
+    - step1: #规则一
+      description: 步骤一的描述
+      path: / #请求路径
+      method: POST #请求方式
+      follow_redirect: true #是否跟随重定向,默认为fasle
+      headers: #设置请求头
+        token: xxxxx #参考设置
+        origin: xxxxx.com
+      set: #参考变量设置
+        key1: md5(randNumber(),32) #md5加密随机数字,并取32位加密后的结果
+        key2: randStr(10) #随机长度为10的字符串
+      body: id={{ key1 }}&name={{ key2 }} #请求体, 使用{{}}包裹设置的变量
+      expression: response.status == 200 && response.body.icontains({{ key1 }})
+    - step2:
+      description: 步骤二的描述
+      path: /test
+      method: GET
+      expression: response.status == 200`)
+
 
 function clickAdd() {
   createPocHandler()

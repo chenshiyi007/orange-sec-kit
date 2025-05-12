@@ -541,6 +541,7 @@ export default {
         appDescription: '应用描述',
         add: '添加',
         createFailed: '创建失败',
+        createSuccess: '创建成功',
       },
     },
     tools: {

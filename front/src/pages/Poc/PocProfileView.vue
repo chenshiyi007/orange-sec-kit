@@ -280,7 +280,6 @@
 import { onMounted, reactive, ref } from 'vue'
 import { getPocDetail, updatePoc } from '@/api/poc.ts'
 import { ExportPoc } from '@/api/report.ts'
-import { listTasks } from '@/api/task.ts'
 import { listVuls } from '@/api/vul.ts'
 import { Notification } from '@arco-design/web-vue'
 import { useRoute } from 'vue-router'
@@ -305,8 +304,6 @@ const props = defineProps({
 })
 
 const exportModalVisible = ref(false)
-const tasksLoading = ref(false)
-const taskOptions = ref<Array<{ instance_id: string; name: string }>>([])
 const vulOptions = ref<Array<{ instance_id: string; name: string; vul_url: string }>>([])
 const vulLoading = ref(false)
 const exportConfig = reactive({
