@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   
   sendMessage: (channel, data) => {
     // 白名单通道
-    const validChannels = ['toMain'];
+    const validChannels = ['toMain', 'close-current-window'];
     if (validChannels.includes(channel)) {
       ipcRenderer.send(channel, data);
     }

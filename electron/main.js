@@ -317,6 +317,7 @@ function setupIPC() {
       height: options.height || 600,
       parent: options.modal ? mainWindow : null,
       modal: options.modal || false,
+      frame: options.frame !== undefined ? options.frame : true,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: false,
@@ -326,14 +327,16 @@ function setupIPC() {
     });
     
     if (isDevelopment) {
-      await newWindow.loadURL(`http://localhost:5173${options.route || '/'}`);
+      await newWindow.loadURL(`http://localhost:5173${options.route.startsWith('#') ? options.route : '/#' + options.route}`);
       if (options.devTools) {
         newWindow.webContents.openDevTools();
       }
     } else {
       // 在生产环境中，需要加载已构建的HTML文件
+      // 确保hash值正确，按需添加#前缀
+      const hashRoute = options.route.startsWith('#') ? options.route : '#' + options.route;
       await newWindow.loadFile(path.join(__dirname, '..', 'front', 'dist', 'index.html'), {
-        hash: options.route
+        hash: hashRoute
       });
     }
     
@@ -372,6 +375,14 @@ function setupIPC() {
   // 打开外部链接
   ipcMain.handle('open-external', async (event, url) => {
     await shell.openExternal(url);
+  });
+  
+  // 关闭当前窗口
+  ipcMain.on('close-current-window', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win) {
+      win.close();
+    }
   });
 }
 

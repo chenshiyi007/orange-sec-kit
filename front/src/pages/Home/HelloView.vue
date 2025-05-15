@@ -420,6 +420,7 @@ const handleSearch = (value?: string) => {
   if (value !== undefined) {
     searchQuery.value = value
   }
+  console.log('手动触发搜索:', searchQuery.value)
   performSearch()
 }
 
@@ -430,12 +431,13 @@ const handleSearchInput = () => {
   }
 
   searchTimer.value = window.setTimeout(() => {
-    if (searchQuery.value.trim().length >= 2) {
+    if (searchQuery.value.trim().length >= 1) {
+      console.log('自动执行搜索:', searchQuery.value)
       performSearch()
     } else if (searchQuery.value.trim() === '') {
       clearResults()
     }
-  }, 500)
+  }, 300)
 }
 
 // 清空结果
@@ -452,14 +454,22 @@ const performSearch = async () => {
     return
   }
 
+  // 设置搜索状态
   isSearching.value = true
   searchLoading.value = true
+  console.log('开始执行搜索...')
 
-  // 同时搜索POC、应用和漏洞
-  await Promise.all([searchPocs(), searchApps(), searchVuls()])
-
-  searchLoading.value = false
-  isSearching.value = false
+  try {
+    // 同时搜索POC、应用和漏洞
+    await Promise.all([searchPocs(), searchApps(), searchVuls()])
+  } catch (error) {
+    console.error('搜索过程出错:', error)
+  } finally {
+    // 无论成功失败都更新状态
+    searchLoading.value = false
+    isSearching.value = false
+    console.log('搜索完成')
+  }
 }
 
 // 搜索POC

@@ -61,17 +61,18 @@
           </div>
 
           <!-- 在新窗口中打开按钮，仅在非独立页面中显示 -->
-          <new-window-button
+          <a-button
             v-if="!isStandalonePage"
-            route="/standalone/webrequester"
             type="outline"
             size="small"
             class="new-window-btn"
+            @click="openStandaloneWindow"
           >
             <template #icon>
               <icon-launch />
             </template>
-          </new-window-button>
+            {{ t('pages.tools.webRequester.newWindow', '新窗口') }}
+          </a-button>
         </div>
       </div>
 
@@ -423,6 +424,27 @@ function parseHttpResponse(rawResponse: string) {
 function getResponseSize() {
   if (!response.value || !response.value.body) return '0 bytes'
   return `${response.value.body.length} bytes`
+}
+
+// 在独立窗口中打开
+function openStandaloneWindow() {
+  // 使用any类型绕过TypeScript检查
+  const electronAPI = (window as any).electronAPI
+
+  if (electronAPI && typeof electronAPI.openNewWindow === 'function') {
+    electronAPI.openNewWindow({
+      route: '#/standalone/webrequester', // 添加#确保正确使用哈希路由
+      width: 1200,
+      height: 800,
+      title: t('pages.tools.webRequester.title', 'Web发包工具'),
+      frame: true, // 改为true启用标准窗口框架
+    }).catch((error: any) => {
+      console.error('打开新窗口失败:', error)
+      Message.error(t('pages.tools.webRequester.openWindowFailed', '打开新窗口失败'))
+    })
+  } else {
+    Message.warning(t('common.electronOnly', '此功能仅在桌面应用中可用'))
+  }
 }
 </script>
 

@@ -137,6 +137,8 @@ export const routers: Array<RouteRecordRaw> = [
     component: WebRequesterStandalone,
     meta: {
       isHidden: true,
+      standalone: true,
+      layout: 'blank',
     },
   },
   {
