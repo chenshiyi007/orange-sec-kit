@@ -14,7 +14,8 @@
     "build:mac:amd64": "npm run build:front && electron-builder --mac --x64",
     "build:mac:arm64": "npm run build:front && electron-builder --mac --arm64",
     "build:win": "npm run build:front && electron-builder --win",
-    "build:linux": "npm run build:front && electron-builder --linux"
+    "build:linux": "npm run build:front && electron-builder --linux dir",
+    "package:linux:tar": "cd dist && tar -czf 小橘子漏洞工坊-1.0.0-linux.tar.gz linux-unpacked/"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0"
@@ -57,7 +58,8 @@
     },
     "linux": {
       "target": ["AppImage", "deb"],
-      "category": "Development"
+      "category": "Development",
+      "icon": "resources/icon.png"
     },
     "nsis": {
       "oneClick": false,
