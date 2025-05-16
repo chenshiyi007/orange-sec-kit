@@ -111,35 +111,37 @@
             <template #title>
               <div class="card-title-with-button">
                 <span>{{ t('pages.vul.profile.siteAndAppInfo') }}</span>
-                <a-space size="medium">
-                  <a-button
-                    type="outline"
-                    size="small"
-                    @click="autoFillAssetInfo"
-                    :loading="autoFillLoading"
-                  >
-                    <template #icon>
-                      <icon-edit />
-                    </template>
-                    {{ t('pages.vul.profile.autoFillAssetInfo') }}
-                  </a-button>
-                  <a-button
-                    type="primary"
-                    size="small"
-                    @click="updateHostInfo"
-                    :loading="saveLoading"
-                    status="success"
-                  >
-                    <template #icon>
-                      <icon-save />
-                    </template>
-                    {{ t('pages.vul.profile.save') }}
-                  </a-button>
-                </a-space>
+                <div class="button-container">
+                  <a-space size="small">
+                    <a-button
+                      type="outline"
+                      size="small"
+                      @click="autoFillAssetInfo"
+                      :loading="autoFillLoading"
+                    >
+                      <template #icon>
+                        <icon-edit />
+                      </template>
+                      {{ t('pages.vul.profile.autoFillAssetInfo') }}
+                    </a-button>
+                    <a-button
+                      type="primary"
+                      size="small"
+                      @click="updateHostInfo"
+                      :loading="saveLoading"
+                      status="success"
+                    >
+                      <template #icon>
+                        <icon-save />
+                      </template>
+                      {{ t('pages.vul.profile.save') }}
+                    </a-button>
+                  </a-space>
+                </div>
               </div>
             </template>
-            <a-form ref="siteFormRef" :model="form" layout="vertical">
-              <a-row :gutter="24">
+            <a-form ref="siteFormRef" :model="form" layout="vertical" class="site-form">
+              <a-row :gutter="[24, 8]">
                 <a-col :span="12">
                   <a-form-item field="host" :label="t('pages.vul.profile.host')">
                     <a-input v-model="form.host" allow-clear />
@@ -152,7 +154,7 @@
                 </a-col>
               </a-row>
 
-              <a-row :gutter="24">
+              <a-row :gutter="[24, 8]">
                 <a-col :span="12">
                   <a-form-item field="ip_address" :label="t('pages.vul.profile.ipAddress')">
                     <a-input v-model="form.ip_address" allow-clear />
@@ -165,7 +167,7 @@
                 </a-col>
               </a-row>
 
-              <a-row :gutter="24">
+              <a-row :gutter="[24, 8]">
                 <a-col :span="12">
                   <a-form-item field="icp_number" :label="t('pages.vul.profile.icpNumber')">
                     <a-input v-model="form.icp_number" allow-clear />
@@ -178,7 +180,7 @@
                 </a-col>
               </a-row>
 
-              <a-row :gutter="24">
+              <a-row :gutter="[24, 8]">
                 <a-col :span="12">
                   <a-form-item field="address" :label="t('pages.vul.profile.address')">
                     <a-input v-model="form.address" allow-clear />
@@ -199,7 +201,7 @@
                 </a-col>
               </a-row>
 
-              <a-row :gutter="24">
+              <a-row :gutter="[24, 8]">
                 <a-col :span="8">
                   <a-form-item
                     field="company_register_money"
@@ -310,7 +312,7 @@
                 "
               >
                 <div class="info-line">
-                  <a-space size="large">
+                  <a-space size="large" :wrap="true">
                     <div class="info-item">
                       <span class="info-label">{{ t('components.pocChecker.path') }}:</span>
                       <span class="info-value">{{ flow.url }}</span>
@@ -335,6 +337,10 @@
                     marginTop: '16px',
                     overflow: 'hidden',
                   }"
+                  :default-size="0.5"
+                  :min="0.2"
+                  :size-to-pixel="true"
+                  class="flow-split"
                 >
                   <template #first>
                     <div class="split-content">
@@ -1336,8 +1342,16 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.vul-profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px;
+}
+
 .vul-profile-content {
-  padding: 0 24px 40px;
+  padding: 0 16px 40px;
+  overflow-x: visible;
 }
 
 .report-name-container {
@@ -1418,7 +1432,7 @@ onUnmounted(() => {
 .content-card {
   margin-bottom: 24px;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -1426,10 +1440,19 @@ onUnmounted(() => {
   background-color: var(--color-bg-2);
   border-bottom: 1px solid var(--color-border-2);
   padding: 16px 20px;
+  z-index: 1;
+  display: block;
+  overflow: visible;
+}
+
+.content-card :deep(.arco-card-header-title) {
+  overflow: visible;
+  display: block;
 }
 
 .content-card :deep(.arco-card-body) {
   padding: 20px;
+  overflow: visible;
 }
 
 .card-title-with-button {
@@ -1437,10 +1460,23 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.card-title-with-button span {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .card-title-with-button :deep(.arco-space) {
-  margin-left: 16px;
+  margin-left: 0;
+  flex-wrap: nowrap;
+}
+
+.card-title-with-button :deep(.arco-btn) {
+  min-width: auto;
+  white-space: nowrap;
 }
 
 .action-buttons {
@@ -1471,6 +1507,8 @@ onUnmounted(() => {
   border-radius: 4px;
   width: 100%;
   box-sizing: border-box;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .split-content {
@@ -1485,6 +1523,10 @@ onUnmounted(() => {
   margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  background-color: var(--color-bg-1);
+  z-index: 1;
 }
 
 /* Info Line Styling */
@@ -1499,7 +1541,9 @@ onUnmounted(() => {
 .info-item {
   display: flex;
   align-items: center;
-  white-space: nowrap;
+  white-space: normal;
+  margin-right: 12px;
+  margin-bottom: 4px;
 }
 
 .info-label {
@@ -1552,6 +1596,25 @@ onUnmounted(() => {
   .info-value {
     max-width: 100%;
   }
+
+  .asset-images-list {
+    justify-content: center;
+  }
+
+  .flow-split {
+    height: 600px !important;
+  }
+
+  .card-title-with-button {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-title-with-button :deep(.arco-space) {
+    margin-top: 8px;
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 .vul-info-container {
@@ -1587,12 +1650,15 @@ onUnmounted(() => {
 
 .desc-container {
   width: 100%;
+  overflow: visible;
 }
 
 .desc-container :deep(.arco-descriptions-item-label) {
   font-weight: 500;
   background-color: var(--color-fill-2);
   width: 140px;
+  white-space: nowrap;
+  overflow: visible;
 }
 
 .desc-container :deep(.arco-descriptions-item-value) {
@@ -1600,6 +1666,7 @@ onUnmounted(() => {
   line-height: 1.6;
   word-break: break-word;
   min-height: 48px;
+  overflow: visible;
 }
 
 .asset-images-container {
@@ -1611,6 +1678,7 @@ onUnmounted(() => {
   flex-wrap: wrap;
   gap: 20px;
   margin-bottom: 16px;
+  justify-content: flex-start;
 }
 
 .asset-image-item {
@@ -1837,5 +1905,210 @@ onUnmounted(() => {
     font-size: 16px;
     font-weight: 500;
   }
+}
+
+/* Additional responsive styles for medium screens */
+@media (max-width: 1024px) {
+  .vul-profile {
+    max-width: 95%;
+    padding: 0 8px;
+  }
+
+  .vul-profile-content {
+    padding: 0 8px 24px;
+  }
+
+  .card-title-with-button span {
+    font-size: 15px;
+  }
+
+  .card-title-with-button :deep(.arco-btn) {
+    font-size: 13px;
+    padding: 0 10px;
+  }
+}
+
+.flow-split {
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  .action-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin: 0 12px 16px;
+  }
+
+  .action-buttons-top {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .card-title-with-button {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-title-with-button .button-container {
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .card-title-with-button :deep(.arco-space) {
+    margin-top: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .action-buttons-top :deep(.arco-space) {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .content-card :deep(.arco-card-body) {
+    padding: 16px 12px;
+  }
+
+  .content-card :deep(.arco-card-header) {
+    padding: 12px 16px;
+  }
+
+  .flow-split {
+    height: 600px !important;
+  }
+
+  /* Make split panels stack on small screens */
+  .flow-split :deep(.arco-split-pane) {
+    width: 100% !important;
+    height: 50% !important;
+    position: static !important;
+    flex-direction: column;
+  }
+
+  .flow-split :deep(.arco-split-trigger) {
+    display: none;
+  }
+
+  .asset-images-list {
+    justify-content: center;
+  }
+}
+
+/* 添加全局响应式样式 */
+@media (max-width: 1366px) {
+  .vul-profile {
+    max-width: 1100px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .vul-profile {
+    max-width: 92%;
+  }
+
+  .asset-image-item, .supplementary-image-item {
+    width: calc(50% - 15px);
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .vul-profile {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .asset-image-item, .supplementary-image-item {
+    width: 100%;
+  }
+
+  .report-name-edit {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .report-name-edit :deep(.arco-input) {
+    width: 100% !important;
+  }
+}
+
+/* 修复表单布局 */
+.vul-profile :deep(.arco-form-item) {
+  margin-bottom: 20px;
+  overflow: visible;
+}
+
+.vul-profile :deep(.arco-form-item-label-col) {
+  overflow: visible;
+}
+
+.vul-profile :deep(.arco-form-item-control-wrapper) {
+  overflow: visible;
+}
+
+/* 确保下拉菜单和数值输入框显示正常 */
+.vul-profile :deep(.arco-select-dropdown),
+.vul-profile :deep(.arco-input-number-popup) {
+  z-index: 1000;
+}
+
+/* 修复响应式表单布局 */
+@media (max-width: 768px) {
+  .vul-profile :deep(.arco-row) {
+    margin-left: -8px !important;
+    margin-right: -8px !important;
+  }
+
+  .vul-profile :deep(.arco-col) {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+.site-form {
+  overflow: visible;
+}
+
+.site-form :deep(.arco-form-item-label) {
+  padding-bottom: 4px;
+}
+
+.site-form :deep(.arco-row) {
+  margin-bottom: 4px;
+}
+
+.site-form :deep(.arco-input-wrapper),
+.site-form :deep(.arco-input-number),
+.site-form :deep(.arco-select) {
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* Reset any problematic overflow styles from Arco components */
+.vul-profile :deep(.arco-btn) {
+  overflow: visible;
+  z-index: 2;
+}
+
+.vul-profile :deep(.arco-space) {
+  overflow: visible;
+}
+
+.vul-profile :deep(.arco-input-wrapper) {
+  overflow: visible;
+}
+
+.vul-profile :deep(.arco-form-item-control) {
+  overflow: visible;
+}
+
+.vul-profile :deep(.arco-card) {
+  overflow: visible;
 }
 </style>
